@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DIO.Bank
 {
     class Program
     {
+        static  List<Conta> listContas = new List<Conta>();
         static void Main(string[] args)
         {
             
@@ -14,27 +16,27 @@ namespace DIO.Bank
                 switch(opcaoUsuario)
                 {
                     case "1":
-                    // ListarContas();
+                    ListarContas();
                     Console.WriteLine($"Case {opcaoUsuario}");
                     break;
 
                     case "2":
-                    // InserirContas();
+                    InserirContas();
                     Console.WriteLine($"Case {opcaoUsuario}");
                     break;
 
                     case "3":
-                    // Transferir();
+                    Transferir();
                     Console.WriteLine($"Case {opcaoUsuario}");
                     break;
 
                     case "4":
-                    // Sacar();
+                    Sacar();
                     Console.WriteLine($"Case {opcaoUsuario}");
                     break;
 
                     case "5":
-                    // Depositar();
+                    Depositar();
                     Console.WriteLine($"Case {opcaoUsuario}");
                     break;
 
@@ -53,6 +55,86 @@ namespace DIO.Bank
 
             Console.WriteLine("Obrigado por usar nossos serviços");
             Console.ReadLine();
+        }
+
+        private static void Depositar()
+        {
+            Console.Write("Digite o número da conta: ");
+            int indiceCnta = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o valor a ser depositado: ");
+            double valorDeposito = double.Parse(Console.ReadLine());
+
+            listContas[indiceCnta].Depositar(valorDeposito);
+        }
+
+        private static void Sacar()
+        {
+            Console.Write("Digite o número da conta: ");
+            int indiceConta = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o valor a ser sacado: ");
+            double valorSaque = double.Parse(Console.ReadLine());
+
+            listContas[indiceConta].Sacar(valorSaque);
+        }
+
+        private static void Transferir()
+        {
+            Console.Write("Digite o número da conta de origem: ");
+            int indiceContaOrigem = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o número da conta de destino: ");
+            int indiceContaDestino= int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o valor a ser tranferido: ");
+            double valorTransferencia = double.Parse(Console.ReadLine());
+
+            listContas[indiceContaOrigem].Transferir(valorTransferencia, listContas[indiceContaDestino]);
+        }
+
+        private static void ListarContas()
+        {
+            Console.WriteLine("Listar Contas");
+
+            if(listContas.Count == 0)
+            {
+              Console.WriteLine("Nenhuma conta cadastrada!");  
+              return;
+            }
+
+            for(int i = 0; i < listContas.Count;  i++)
+            {
+                Conta conta =  listContas[i];
+                Console.Write("#{0} - ", i);
+                Console.WriteLine(conta);
+            }
+        }
+
+        private static void InserirContas()
+        {
+            Console.WriteLine("Inserir nova conta: ");
+
+            Console.Write("Digite 1 para Conta Física ou 2 para Jurídica: ");
+            int entradaTipoConta = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o nome do cliente: ");
+            string entradaNome = Console.ReadLine();
+
+            Console.Write("Digite o saldo inicial:  ");
+            double entradaSaldo = double.Parse(Console.ReadLine());
+
+            Console.Write("Digite o crédito: ");
+           double entradaCredito = double.Parse(Console.ReadLine());
+
+           Conta novaConta = new Conta(
+               tipoConta: (TipoConta)entradaTipoConta,
+               saldo: entradaSaldo,
+               credito: entradaCredito,
+               nome: entradaNome
+           );
+
+           listContas.Add(novaConta);
         }
 
         private static string ObterOpcaoUsuario()
